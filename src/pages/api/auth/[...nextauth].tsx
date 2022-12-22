@@ -43,7 +43,7 @@ const options: NextAuthOptions = {
         logo: "", // Absolute URL to image
         buttonText: "" // Hex color code
     },
-   // adapter: MongoDBAdapter(clientPromise),
+   adapter: MongoDBAdapter(clientPromise),
 }
 
 export default (req, res) => NextAuth(req, res, options)
