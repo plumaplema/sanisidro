@@ -40,7 +40,7 @@ const options: NextAuthOptions = {
     theme: {
         colorScheme: "light", // "auto" | "dark" | "light"
         brandColor: "", // Hex color code
-        logo: "", // Absolute URL to image
+        logo: "http://pnhssanisidro.depedparanaquecity.com/wp-content/uploads/2021/05/School-Logo-2.png", // Absolute URL to image
         buttonText: "" // Hex color code
     },
    //adapter: MongoDBAdapter(clientPromise),
