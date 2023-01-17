@@ -30,7 +30,6 @@ const options: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async signIn({ account, profile }) {
-            console.log(profile)
             const { email } = profile
             try {
                 const user = await prisma.user.findFirst({
@@ -38,6 +37,7 @@ const options: NextAuthOptions = {
                         email: email
                     }
                 })
+                console.log(user)
                 if (user.emailVerified) {
                     return true
                 }
