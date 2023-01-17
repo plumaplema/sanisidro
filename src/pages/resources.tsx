@@ -51,7 +51,7 @@ export const getServerSideProps = async ({ req, res }) => {
         'public, s-maxage=10, stale-while-revalidate=59'
     )
 
-    const criterias = await prisma.criteriaName.findMany()
+    const criterias = await prisma.criteriaCategories.findMany()
 
     const criteria: typeof criterias = JSON.parse(JSON.stringify(criterias))
     return {
