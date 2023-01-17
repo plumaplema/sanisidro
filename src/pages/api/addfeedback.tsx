@@ -38,17 +38,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     })
 
-    const student = await prisma.feedBack.create({
-        data: {
-            Name,
-            Age,
-            Gender,
-            customerName,
-            Transaction: {
-                create: transactions
-            }
-        }
-    })
 
-    res.status(200).json(student)
+    res.status(200).json({ status: false })
 }
