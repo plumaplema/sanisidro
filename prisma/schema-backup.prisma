@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Student {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  Lrn       Int      @unique
+  FirstName String
+  LastName  String
+  Score     Int?     @default(0)
+  Section   Section? @relation(fields: [sectionId], references: [id])
+  sectionId Int?
+}
+
+model Section {
+  ident    String    @id @default(auto()) @map("_id") @db.ObjectId
+  id       Int       @unique
+  Section  String    @unique
+  Adviser  String
+  students Student[]
+}
+
+model CustomerCategories {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+}
+
+model CriteriaCategories {
+  id       String     @id @default(auto()) @map("_id") @db.ObjectId
+  name     String     @unique
+  Criteria Criteria[]
+}
+
+model TransactionCategories {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+}
+
+model Criteria {
+  id                   String             @id @default(auto()) @map("_id") @db.ObjectId
+  name                 CriteriaCategories @relation(fields: [criteriaCategoriesId], references: [id])
+  score                Int
+  criteriaCategoriesId String             @db.ObjectId
+}
+
+model FeedBack {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  customerName String?
+  age          Int
+  start        DateTime
+  end          DateTime? @default(now())
+}

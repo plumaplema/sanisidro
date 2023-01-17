@@ -10,4 +10,4 @@ export default withAuth({
     },
 })
 
-export const config = { matcher: ["/resourcess"] }
+export const config = { matcher: ["/dashboard"] }

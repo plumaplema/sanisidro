@@ -14,7 +14,7 @@ const theme = extendTheme({
   semanticTokens: {
     colors: {
       text: {
-        default: '#16161D',
+        default: '#E6E2C3',
         _dark: '#ade3b8',
       },
       heroGradientStart: {
@@ -30,11 +30,13 @@ const theme = extendTheme({
       button: '12px',
     },
   },
-  colors: {
-    black: '#16161D',
-  },
   fonts,
   breakpoints,
+  components: {
+    Text: {
+      color: 'yellow.400'
+    }
+  }
 })
 
 export default theme

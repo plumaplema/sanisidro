@@ -1,8 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
-import CredentialsProvider from "next-auth/providers/credentials"
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
-import clientPromise from "../../../lib/mongodb"
 import GoogleProvider from 'next-auth/providers/google'
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import prisma from '../../../lib/prismadb'
 
 const options: NextAuthOptions = {
     providers: [
@@ -31,19 +30,35 @@ const options: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async signIn({ account, profile }) {
-            if (account.provider === "google") {
-                return profile.email.endsWith("@deped.gov.ph")
+            console.log(profile)
+            const { email } = profile
+            try {
+                const user = await prisma.user.findFirst({
+                    where: {
+                        email: email
+                    }
+                })
+                if (user.emailVerified) {
+                    return true
+                }
+                return false
+
+            } catch (e) {
+                return false
             }
-            return false // Do different verification for other providers that don't have `email_verified`
         },
     },
+
     theme: {
         colorScheme: "light", // "auto" | "dark" | "light"
         brandColor: "", // Hex color code
-        logo: "", // Absolute URL to image
+        logo: "http://pnhssanisidro.depedparanaquecity.com/wp-content/uploads/2021/05/School-Logo-2.png", // Absolute URL to image
         buttonText: "" // Hex color code
     },
-    adapter: MongoDBAdapter(clientPromise),
+    pages: {
+        error: '/auth/error'
+    },
+    adapter: PrismaAdapter(prisma),
 }
 
 export default (req, res) => NextAuth(req, res, options)
