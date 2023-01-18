@@ -7,5 +7,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const transact = await prisma.transactionCategories.findMany()
     const customer = await prisma.customerCategories.findMany()
 
-    res.status(200).json([criteria, transact, customer])
+    res.status(200).json({ criteria, transact, customer })
 }
