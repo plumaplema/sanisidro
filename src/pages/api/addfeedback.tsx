@@ -1,5 +1,6 @@
+import { Prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Criterias, FeedBackPostData, Transaction } from "../../lib/Interfaces";
+import { FeedBackPostData, FeedBackPostDatas } from "../../lib/Interfaces";
 import prisma from "../../lib/prismadb";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -8,36 +9,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return
     }
     const body: FeedBackPostData = JSON.parse(req.body)
-    const { Age, Gender, Name, customerName, feedback } = body
 
-    const transactions: Transaction[] = feedback.map((value) => {
+    const { age, criteriaScores, customerCategoriesId, customerName, gender,
+        office, start, transactionCategoriesId } = body
 
-        const { criteriaNameIds, transactionNameId } = value
+    const data: Prisma.Enumerable<Prisma.CriteriaCreateManyFeedBackInput> = criteriaScores.map((value, key) => {
+        const { id, score } = value
+        return { criteriaCategoriesId: id, score }
+    })
 
-        const criteria: Criterias[] = criteriaNameIds.map(values => {
-            const { CriteriaScore, id } = values
-            return {
-                CriteriaScore,
-                Criteria: {
-                    connect: {
-                        id
-                    }
+    const addfeeback = await prisma.feedBack.create({
+        data: {
+            age,
+            gender,
+            office,
+            start,
+            criteriaScores: {
+                createMany: {
+                    data
                 }
-            }
-        })
-
-        return {
-            CriteriaScore: {
-                create: criteria
             },
-            Transaction: {
-                connect: {
-                    id: transactionNameId
-                }
-            }
+            customerCategoriesId,
+            customerName,
+            transactionCategoriesId
         }
     })
 
 
-    res.status(200).json({ status: false })
+    res.status(200).json({ addfeeback })
 }

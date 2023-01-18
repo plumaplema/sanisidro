@@ -2,6 +2,8 @@ import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import prisma from '../../../lib/prismadb'
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter"
+import clientPromise from "../../../lib/mongodb"
 
 const options: NextAuthOptions = {
     providers: [
@@ -58,7 +60,7 @@ const options: NextAuthOptions = {
     pages: {
         error: '/auth/error'
     },
-    adapter: PrismaAdapter(prisma),
+    adapter: MongoDBAdapter(clientPromise),
 }
 
 export default (req, res) => NextAuth(req, res, options)

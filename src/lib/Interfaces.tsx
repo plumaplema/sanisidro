@@ -1,3 +1,5 @@
+import { Office } from "@prisma/client"
+
 export interface ADDSTUDENT {
     id: number, student_name: string, level: number, section: string
 }
@@ -30,30 +32,22 @@ export interface FeedBack {
 }
 
 export interface FeedBackPostData {
-    feedback: Array<FeedBack>
-    Name: string
-    Age: number
-    Gender: string,
-    customerName: "Learner" | "Parent" | "Teaching Personnel" | "Non-Teaching Personnel" | "School Administrator/School Head" | "Other Stakeholders"
+    customerName: string
+    age: number
+    gender: string
+    office: Office
+    start: Date
+    criteriaScores: Array<CriteriaScore>
+    customerCategoriesId: string
+    transactionCategoriesId: string
+
 }
 
-export interface Transaction {
-    Transaction: {
-        connect: {
-            id: string;
-        };
-    };
-    CriteriaScore: {
-        create: Criterias[];
-    };
+export interface CriteriaScore {
+    id: string
+    score: number
 }
 
-export interface Criterias {
-    Criteria: {
-        connect: {
-            id: string
-        }
-    },
-    CriteriaScore: number
-
+export interface FeedBackPostDatas {
+    datas: Array<FeedBackPostData>
 }

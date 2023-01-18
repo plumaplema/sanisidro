@@ -12,34 +12,62 @@ interface FeedBack {
 
 const resources = ({ criteria }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
-    const datas: FeedBackPostData = {
-        Name: "Janeelyn Loyogoy",
-        Age: 100,
-        customerName: 'Other Stakeholders',
-        Gender: "Male",
-        feedback: [{
-            criteriaNameIds: [{ CriteriaScore: 1, id: "63b67b23020eb246c17a34b6" },
-            { CriteriaScore: 5, id: "63b681055f744282108cba7c" }],
-            transactionNameId: "63b684225f744282108cba8f"
-        },
-        {
-            criteriaNameIds: [{ CriteriaScore: 1, id: "63b67b23020eb246c17a34b6" },
-            { CriteriaScore: 5, id: "63b681055f744282108cba7c" }],
-            transactionNameId: "63b684235f744282108cba93"
-        }]
+    const now = new Date()
+
+    const data: FeedBackPostData = {
+        age: 10,
+        start: now,
+        customerCategoriesId: "63c6a1cceff15c4826e62a65",
+        transactionCategoriesId: "63c6a206eff15c4826e62a6d",
+        customerName: "Gilbert Loyogoy",
+        gender: "Male",
+        office: 'CUSTODIAN',
+        criteriaScores: [
+            {
+                "id": "63c6a182eff15c4826e62a55",
+                score: 3
+            },
+            {
+                "id": "63c6a183eff15c4826e62a56",
+                score: 5
+            },
+            {
+                "id": "63c6a183eff15c4826e62a57",
+                score: 2
+            },
+            {
+                "id": "63c6a183eff15c4826e62a58",
+                score: 3
+            },
+            {
+                "id": "63c6a183eff15c4826e62a59",
+                score: 5
+            },
+            {
+                "id": "63c6a184eff15c4826e62a5a",
+                score: 4
+            },
+            {
+                "id": "63c6a184eff15c4826e62a5b",
+                score: 4
+            }]
+
     }
+
     return (
         <>
             <div>resources</div>
-            <Button onClick={async () => {
-                const user = await fetch('api/addfeedback', {
-                    method: "POST",
-                    body: JSON.stringify(datas)
-                })
-                const data = await user.json()
-                console.log(data)
-
-            }}> try </Button>
+            <Button onClick={
+                async () => {
+                    const req = await fetch("/api/addfeedback",
+                        {
+                            method: "POST",
+                            body: JSON.stringify(data)
+                        })
+                    const res = await req.json()
+                    console.log(res)
+                }
+            }> try </Button>
         </>
 
     )
